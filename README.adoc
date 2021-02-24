@@ -1,1 +1,8 @@
 = Movie data warehouse
+
+== Membre du groupe
+
+. FALADE Irving
+. DIALLO Ibrahima
+. DIALLO Mamadou Saliou
+. LE MEUR Gurvan
