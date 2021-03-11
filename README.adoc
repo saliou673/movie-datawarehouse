@@ -6,3 +6,9 @@
 . DIALLO Ibrahima
 . DIALLO Mamadou Saliou
 . LE MEUR Gurvan
+
+== Installation
+Installer le gestionnaire de packet de python `pip3`
+```
+sudo apt install python3-pip
+```
