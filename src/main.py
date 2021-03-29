@@ -4,7 +4,7 @@ from core.logger import log
 import pandas  as pd
 import numpy
 import requests
-from core.sparqlinfo import getTvShowInfo
+from core.sparqlinfo import getTvShowInfo, getMovieInfo
 
 
 db = Database()
@@ -52,4 +52,5 @@ movies = primedata.itertuples()
 # for movie in movies:
 #     print(movie.nbSeason)
 
-print(getTvShowInfo('Major Crimes'))
+# print(getTvShowInfo('Major Crimes'))
+print(getMovieInfo('Lifeline'))
