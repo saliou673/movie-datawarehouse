@@ -9,26 +9,30 @@ class Database:
         log.info("Connected to server !")
 
 
+    # Connect to the database
     def connect(self):
         try:
-            connection = connector.connect(**databaseConfig)
-            if connection.is_connected():
-                self.connection = connection
-                self.cursor = connection.cursor()
+            self.connection = connector.connect(**databaseConfig)
         except Error as e:
             log.error("Error while connecting to MySQL", e)
     
     # Execute select query
-    def query (self, query, parameters):
-        return self.cursor.execute(query)
+    def execute (self, query, values):
+        self.connect()
+        cursor = self.connection.cursor().execute(query, values)
+        if(cursor != None):
+            cursor.close()
 
     #Execute SQL script
     def executeScriptFile(self, filename):
+        self.connect()
         sqlFile = open(filename)
         sqlString = sqlFile.read()
-        self.cursor.execute(sqlString, multi=True)
+        cursor = self.connection.cursor().execute(sqlString, multi=True)
+        cursor.close()
 
+    # Select database
     def selectDB(self, dbname):
-        databaseConfig['database'] = dbname;
+        databaseConfig['database'] = dbname
         self.connect()
         
