@@ -14,36 +14,37 @@ def getTvShowInfo(title):
     params = (
         ('default-graph-uri', 'http://dbpedia.org'),
         ('query', """SELECT distinct 
-                    ?movie 
-                    ?releaseDate (xsd:string(?countryIsoCode ) as ?countryIsoCode)
-                    ?countryName
-                    ?language
-                    ?writerName
-                    ?writerBirthDate
-                    (xsd:integer(?numberOfEpisodes) as ?numberOfEpisodes)
-                    (xsd:integer(?numberOfSeasons) as ?numberOfSeasons)
-                    (ceil(xsd:float(?completionDate-?releaseDate)/(24*60*60*365)) as ?shootingDuration) # en annee
-                    (count(?principalActors) as ?nbPrincipalActors)
-                    WHERE{
-                        ?movie rdf:type dbo:TelevisionShow;
-                                dbp:name \"""" + title + """\"@en;
-                                dbo:releaseDate ?releaseDate;
-                                dbo:completionDate ?completionDate;
-                                dbo:country ?country;
-                                dbo:numberOfEpisodes ?numberOfEpisodes;
-                                dbo:numberOfSeasons ?numberOfSeasons;
-                                dbp:starring ?principalActors;
-                                dbo:creator ?creator.
-                        ?country dbo:iso31661Code ?countryIsoCode;
-                                dbp:conventionalLongName ?countryName;
-                                dbp:languages ?languages.
-                        ?languages dbp:name ?language.
-                        ?creator dbo:birthDate ?writerBirthDate;
-                                 dbp:name ?writerName;
-                                 dbp:birthPlace ?birthPlace.
-                        ?birthPlace dbp:pushpinLabel ?writerBirthPlace
-                    }
-                    LIMIT 1"""),
+                        ?movie
+                        ?language
+                        ?releaseDate
+                        ?completionDate
+                        ?country
+                        ?numberOfEpisodes
+                        ?numberOfSeasons 
+                        (ceil(xsd:float(?completionDate-?releaseDate)/(24*60*60*365)) as ?shootingDuration) # en annee
+                        (count(?principalActors) as ?nbPrincipalActors)
+                        ?writer
+                       ?writerName
+                       ?writerBirthDate
+                       ?birthPlace
+                        WHERE{
+                            ?movie rdf:type dbo:TelevisionShow;
+                                    dbp:name  \"""" + title + """\"@en;
+                                    dbp:country ?country;
+                                    dbo:numberOfEpisodes ?numberOfEpisodes;
+                                    dbo:numberOfSeasons ?numberOfSeasons;
+                                    dbp:starring ?principalActors;
+                                    dbp:creator ?writer;
+                                   dbp:language ?language
+                            OPTIONAL {
+                                    ?writer dbo:birthDate ?writerBirthDate;
+                                                  dbp:name ?writerName;
+                                                  dbp:birthPlace ?birthPlace.
+                            }.
+                           OPTIONAL {?movie  dbo:completionDate ?completionDate;
+                                                            dbo:releaseDate ?releaseDate}
+                        }
+                        LIMIT 1"""),
         ('format', 'application/sparql-results+json'),
         ('timeout', '30000'),
         ('signal_void', 'on'),
@@ -67,7 +68,8 @@ def getMovieInfo(title):
                         ?benefice
                         ?releaseDate
                         (count(?acteurs)  as ?nbPrincipalActors)
-                        ?countryName
+                        ?country
+                        ?writer
                         ?writerName
                         ?writerBirthDate
                         ?writerBirthPlace
@@ -78,15 +80,14 @@ def getMovieInfo(title):
                                     dbo:runtime ?duration;
                                     dbp:gross ?benefice;
                                     dbo:starring  ?acteurs;
-                                    dbo:language ?langue;
-                                    dbp:released ?releaseDate;
-                                    dbp:country ?countryName;
+                                    dbp:language ?language;
+                                    dbp:country ?country;
                                     dbo:writer ?writer.
-                        ?writer dbo:birthDate ?writerBirthDate;
-                                    dbp:name  ?writerName;
-                                    dbp:birthPlace ?writerBirthPlace.
-                        ?langue foaf:name ?language.
-
+                       OPTIONAL {
+                                           ?writer dbp:birthDate ?writerBirthDate;
+                                                       dbp:name  ?writerName;
+                                                       dbp:birthPlace ?writerBirthPlace}.
+                        OPTIONAL {?movie dbo:released ?releaseDate}.
                         }
                         LIMIT 1"""),
         ('format', 'application/sparql-results+json'),
