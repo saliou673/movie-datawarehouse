@@ -6,6 +6,7 @@ from config import databaseConfig
 class Database:
     def __init__(self,):
         self.connect()
+        self.lastInsertId = -1
         log.info("Connected to server !")
 
 
@@ -17,11 +18,14 @@ class Database:
             log.error("Error while connecting to MySQL", e)
     
     # Execute select query
-    def execute (self, query, values):
+    def execute (self, query, values=()):
         self.connect()
-        cursor = self.connection.cursor().execute(query, values)
-        if(cursor != None):
-            cursor.close()
+        cursor = self.connection.cursor()
+        cursor.execute(query, values)
+        result = cursor.fetchall()
+        self.lastInsertId = cursor.lastrowid
+        cursor.close()
+        return result
 
     #Execute SQL script
     def executeScriptFile(self, filename):
@@ -35,4 +39,7 @@ class Database:
     def selectDB(self, dbname):
         databaseConfig['database'] = dbname
         self.connect()
+    
+    def getLastInsertId(self):
+        return self.lastInsertId
         

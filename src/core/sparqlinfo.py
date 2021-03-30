@@ -24,9 +24,9 @@ def getTvShowInfo(title):
                         (ceil(xsd:float(?completionDate-?releaseDate)/(24*60*60*365)) as ?shootingDuration) # en annee
                         (count(?principalActors) as ?nbPrincipalActors)
                         ?writer
-                       ?writerName
-                       ?writerBirthDate
-                       ?birthPlace
+                        ?writerName
+                        ?writerBirthDate
+                        ?writerBirthPlace
                         WHERE{
                             ?movie rdf:type dbo:TelevisionShow;
                                     dbp:name  \"""" + title + """\"@en;
@@ -39,10 +39,10 @@ def getTvShowInfo(title):
                             OPTIONAL {
                                     ?writer dbo:birthDate ?writerBirthDate;
                                                   dbp:name ?writerName;
-                                                  dbp:birthPlace ?birthPlace.
+                                                  dbp:birthPlace ?writerBirthPlace.
                             }.
                            OPTIONAL {?movie  dbo:completionDate ?completionDate;
-                                                            dbo:releaseDate ?releaseDate}
+                                             dbo:releaseDate ?releaseDate}
                         }
                         LIMIT 1"""),
         ('format', 'application/sparql-results+json'),
@@ -55,6 +55,7 @@ def getTvShowInfo(title):
     results = response.json()['results']['bindings']
     if(len(results) == 0):
         return None
+        
     return results[0]
 
 
