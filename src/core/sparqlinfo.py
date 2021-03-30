@@ -27,7 +27,7 @@ def getTvShowInfo(title):
                     (count(?principalActors) as ?nbPrincipalActors)
                     WHERE{
                         ?movie rdf:type dbo:TelevisionShow;
-                                dbp:name \'""" + title + """\'@en;
+                                dbp:name \"""" + title + """\"@en;
                                 dbo:releaseDate ?releaseDate;
                                 dbo:completionDate ?completionDate;
                                 dbo:country ?country;
@@ -76,7 +76,7 @@ def getMovieInfo(title):
                         WHERE{
 
                         ?movie rdf:type <http://dbpedia.org/ontology/Film>;
-                                    dbp:name  \'""" + title + """\'@en;
+                                    dbp:name  \"""" + title + """\"@en;
                                     dbo:runtime ?duration;
                                     dbp:gross ?benefice;
                                     dbo:starring  ?acteurs;
@@ -102,3 +102,8 @@ def getMovieInfo(title):
     if(len(results) == 0):
         return None
     return results[0]
+
+    'title'
+    'hello'
+
+    'hello's'
