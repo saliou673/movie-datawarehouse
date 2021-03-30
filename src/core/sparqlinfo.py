@@ -23,7 +23,6 @@ def getTvShowInfo(title):
                     (xsd:integer(?numberOfEpisodes) as ?numberOfEpisodes)
                     (xsd:integer(?numberOfSeasons) as ?numberOfSeasons)
                     (ceil(xsd:float(?completionDate-?releaseDate)/(24*60*60*365)) as ?shootingDuration) # en annee
-                    ((?totalDuration * xsd:integer(?numberOfEpisodes)) as ?totalDuration)
                     (count(?principalActors) as ?nbPrincipalActors)
                     WHERE{
                         ?movie rdf:type dbo:TelevisionShow;
@@ -34,7 +33,6 @@ def getTvShowInfo(title):
                                 dbo:numberOfEpisodes ?numberOfEpisodes;
                                 dbo:numberOfSeasons ?numberOfSeasons;
                                 dbp:starring ?principalActors;
-                                dbo:runtime ?totalDuration;
                                 dbo:creator ?creator.
                         ?country dbo:iso31661Code ?countryIsoCode;
                                 dbp:conventionalLongName ?countryName;
@@ -75,7 +73,7 @@ def getMovieInfo(title):
                         ?writerBirthPlace
                         WHERE{
 
-                        ?movie rdf:type <http://dbpedia.org/ontology/Film>;
+                        ?movie rdf:type dbo:Film;
                                     dbp:name  \"""" + title + """\"@en;
                                     dbo:runtime ?duration;
                                     dbp:gross ?benefice;
@@ -102,8 +100,3 @@ def getMovieInfo(title):
     if(len(results) == 0):
         return None
     return results[0]
-
-    'title'
-    'hello'
-
-    'hello's'
