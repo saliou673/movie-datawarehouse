@@ -52,10 +52,12 @@ def getTvShowInfo(title):
     )
 
     response = requests.get('https://dbpedia.org/sparql', headers=headers, params=params)
+    if(response.status_code > 201):
+        return None
     results = response.json()['results']['bindings']
     if(len(results) == 0):
         return None
-        
+
     return results[0]
 
 
@@ -98,6 +100,8 @@ def getMovieInfo(title):
     )
 
     response = requests.get('https://dbpedia.org/sparql', headers=headers, params=params)
+    if(response.status_code > 201):
+        return None
     results = response.json()['results']['bindings']
     if(len(results) == 0):
         return None

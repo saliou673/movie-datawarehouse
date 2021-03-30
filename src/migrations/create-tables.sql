@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `movie_warehouse`.`writer` (
   `id_writer` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `birthDate` DATE NULL,
-  `birthPlace` VARCHAR(45) NULL,
+  `birthPlace` VARCHAR(255) NULL,
   PRIMARY KEY (`id_writer`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB;
@@ -26,7 +26,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `movie_warehouse`.`category` (
   `id_category` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(255) NULL,
   PRIMARY KEY (`id_category`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB;
