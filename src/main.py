@@ -39,8 +39,8 @@ datasetDir = os.getcwd() + "/src/datasets/"
 
 primeUpload(datasetDir + "primevideo.csv", countries, db)
 
-nextflixUpload(datasetDir + "netflix.csv", countries, db)
 disneyUpload(datasetDir + "disneyplus.csv", countries, db)
+nextflixUpload(datasetDir + "netflix.csv", countries, db)
 
 # Add and compute year  column on movie.
 db.executeScriptFile(sqlDir + "add-compute-year.sql")
@@ -54,11 +54,6 @@ select co.name as pays, c.name as 'category', count(m.id_movie) as nb_film,
         group by co.name, c.name with rollup;
 """)
 
-query = """select count(c.id_category) as category, c.name as name from movie m, category c, country co where 
-            m.id_category=c.id_category and m.id_country=co.id_country 
-            and co.name='United Kingdom of Great Britain and Northern'
-            group by c.name
-            order by count(c.id_category) desc"""
 df = pd.read_sql(query, db.connection)
 fig = px.histogram(df, x="category", color="name")
 fig.show()
