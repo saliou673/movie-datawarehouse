@@ -8,6 +8,7 @@ from core.sparqlinfo import getTvShowInfo, getMovieInfo
 from core.customhttprequest import uploadCountries
 from core.primeupload import primeUpload
 from core.netflixupload import nextflixUpload
+from core.disneyupload import disneyUpload
 
 
 db = Database()
@@ -39,4 +40,5 @@ datasetDir = os.getcwd() + "/src/datasets/"
 
 #primeUpload(datasetDir + "primevideo.csv", countries, db)
 
-nextflixUpload(datasetDir + "netflix.csv", countries, db)
+#nextflixUpload(datasetDir + "netflix.csv", countries, db)
+#disneyUpload(datasetDir + "disneyplus.csv", countries, db)
