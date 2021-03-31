@@ -51,3 +51,16 @@ where f.id_movie=m.id_movie and m.id_category=c.id_category
 group by f.movie_source, c.name with rollup;
 
 
+-- 9. Le nom et la date de naissance du réalisateur le plus vieux
+select w.name, MIN(w.birthdate) as dateNaissance
+from facts f, movie m, writer w 
+where f.id_writer=w.id_writer and f.id_movie=m.id_movie;
+
+--10. Top 10 des film ayant la plus longue durée
+select m.title as Titre, duration
+from facts f, movie m, category c 
+where m.id_category = c.id_category and m.id_movie=f.id_movie and f.movie_type='movie'
+order by duration desc
+limit 10;
+
+
