@@ -25,17 +25,23 @@ def splitAndReplace(value):
     return arr[len(arr) - 1].replace("_", " ")
 
 def insertMovie(values, db):
-    query = ("""INSERT INTO movie(title, release_date, duration, main_actor,
-                id_writer, id_country, id_category, movie_source, movie_type) 
-                VALUES(%s, %s,%s,%s,%s,%s,%s, %s, %s)""")
+    query = ("""INSERT INTO facts(release_date, duration, main_actor,
+                id_writer, id_country, id_movie, movie_source, movie_type) 
+                VALUES(%s, %s, %s, %s, %s, %s, %s, %s)""")
    
     db.execute(query, values)
 
 def insertTvShow(values, db):
-    query = ("""INSERT INTO movie (title, release_date, filming_time, 
+    query = ("""INSERT INTO facts (release_date, filming_time, 
                 number_of_seasons, number_of_episodes,
-                main_actor, id_writer, id_country, id_category,
+                main_actor, id_writer, id_country, id_movie,
                 movie_source, movie_type)
-                VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""")
+                VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""")
 
     db.execute(query, values)
+
+def insertBaseMovie(title, idCategory, db):
+    query = ("INSERT INTO movie(title, id_category) VALUES (%s, %s)")
+    values = (title, idCategory,)
+    db.execute(query, values)
+    return db.getLastInsertId()

@@ -6,7 +6,7 @@ import numpy
 import requests
 from core.sparqlinfo import getTvShowInfo, getMovieInfo
 from core.customhttprequest import uploadCountries
-from core.utils import getCountryId, getCategoryId, normalizeGenre, splitAndReplace, insertMovie, insertTvShow
+from core.utils import getCountryId, getCategoryId, normalizeGenre, splitAndReplace, insertMovie, insertTvShow, insertBaseMovie
 def primeUpload(filename, countries, db):
     primecols = ['Name of the show', 'Year of release', 'Language', 'Genre', 'No of seasons available']
     primedata = pd.read_csv(filename, usecols = primecols)
@@ -92,9 +92,11 @@ def primeUpload(filename, countries, db):
                 if('releaseDate' in data.keys()):
                     releaseDate = data['releaseDate']['value']
 
-                values = (movie.title, releaseDate, data['duration']['value'],
+                idMovie = insertBaseMovie(movie.title, idCategory, db)
+
+                values = (releaseDate, data['duration']['value'],
                             data['nbPrincipalActors']['value'], idWriter,
-                            idCountry, idCategory, 'prime','movie',)
+                            idCountry, idMovie, 'prime','movie',)
                 insertMovie(values, db)
             
         else: # tv show
@@ -145,14 +147,12 @@ def primeUpload(filename, countries, db):
             if('shootingDuration' in data.keys()):
                 shootingDuration = data['shootingDuration']['value']
                     
-            query = ("""INSERT INTO movie (title, release_date, filming_time, 
-                    number_of_seasons, number_of_episodes,
-                    main_actor, id_writer, id_country, id_category,
-                    movie_source, movie_type)
-                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""")
-            values = (movie.title, releaseDate, shootingDuration, data['numberOfSeasons']['value'],
+          
+            idMovie = insertBaseMovie(movie.title, idCategory, db)
+
+            values = (releaseDate, shootingDuration, data['numberOfSeasons']['value'],
                         data['numberOfEpisodes']['value'], data['nbPrincipalActors']['value'],
-                        idWriter,idCountry, idCategory, 'prime','tvshow',)
+                        idWriter,idCountry, idMovie, 'prime','tvshow',)
             insertTvShow(values, db)
         
         print("=================================<  \"", movie.title, " \":", found,

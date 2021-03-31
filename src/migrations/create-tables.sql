@@ -7,11 +7,10 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET sql_mode = '';
 
-
 -- -----------------------------------------------------
--- Table `movie_warehouse`.`writer`
+-- Table `movie_warehouse2`.`writer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `movie_warehouse`.`writer` (
+CREATE TABLE IF NOT EXISTS `movie_warehouse2`.`writer` (
   `id_writer` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
   `birthDate` DATE NULL,
@@ -22,20 +21,20 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `movie_warehouse`.`category`
+-- Table `movie_warehouse2`.`category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `movie_warehouse`.`category` (
+CREATE TABLE IF NOT EXISTS `movie_warehouse2`.`category` (
   `id_category` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(255) NULL,
+  `name` VARCHAR(45) NULL,
   PRIMARY KEY (`id_category`),
   UNIQUE INDEX `name_UNIQUE` (`name` ASC) VISIBLE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `movie_warehouse`.`country`
+-- Table `movie_warehouse2`.`country`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `movie_warehouse`.`country` (
+CREATE TABLE IF NOT EXISTS `movie_warehouse2`.`country` (
   `id_country` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `alphacode` VARCHAR(45) NULL,
@@ -48,11 +47,26 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `movie_warehouse`.`movie`
+-- Table `movie_warehouse2`.`movie`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `movie_warehouse`.`movie` (
+CREATE TABLE IF NOT EXISTS `movie_warehouse2`.`movie` (
   `id_movie` INT NOT NULL AUTO_INCREMENT,
-  `title` VARCHAR(255) NOT NULL,
+  `title` VARCHAR(255) NULL,
+  `id_category` INT NOT NULL,
+  PRIMARY KEY (`id_movie`, `id_category`),
+  INDEX `fk_movie_category1_idx` (`id_category` ASC) VISIBLE,
+  CONSTRAINT `fk_movie_category1`
+    FOREIGN KEY (`id_category`)
+    REFERENCES `movie_warehouse2`.`category` (`id_category`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `movie_warehouse2`.`facts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `movie_warehouse2`.`facts` (
   `release_date` DATE NULL,
   `duration` INT NULL,
   `number_of_seasons` INT NULL DEFAULT 0,
@@ -61,26 +75,26 @@ CREATE TABLE IF NOT EXISTS `movie_warehouse`.`movie` (
   `main_actor` INT NULL,
   `id_writer` INT NOT NULL,
   `id_country` INT NOT NULL,
-  `id_category` INT NOT NULL,
+  `id_movie` INT NOT NULL,
   `movie_source` ENUM('prime', 'netflix', 'disneyplus') NULL,
   `movie_type` ENUM('movie', 'tvshow') NULL,
-  PRIMARY KEY (`id_movie`, `id_writer`, `id_country`, `id_category`),
+  PRIMARY KEY (`id_writer`, `id_country`, `id_movie`),
   INDEX `fk_Movie_Writer1_idx` (`id_writer` ASC) VISIBLE,
   INDEX `fk_Movie_Country1_idx` (`id_country` ASC) VISIBLE,
-  INDEX `fk_movie_category1_idx` (`id_category` ASC) VISIBLE,
+  INDEX `fk_facts_movie1_idx` (`id_movie` ASC) VISIBLE,
   CONSTRAINT `fk_Movie_Writer1`
     FOREIGN KEY (`id_writer`)
-    REFERENCES `movie_warehouse`.`writer` (`id_writer`)
+    REFERENCES `movie_warehouse2`.`writer` (`id_writer`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Movie_Country1`
     FOREIGN KEY (`id_country`)
-    REFERENCES `movie_warehouse`.`country` (`id_country`)
+    REFERENCES `movie_warehouse2`.`country` (`id_country`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_movie_category1`
-    FOREIGN KEY (`id_category`)
-    REFERENCES `movie_warehouse`.`category` (`id_category`)
+  CONSTRAINT `fk_facts_movie1`
+    FOREIGN KEY (`id_movie`)
+    REFERENCES `movie_warehouse2`.`movie` (`id_movie`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
