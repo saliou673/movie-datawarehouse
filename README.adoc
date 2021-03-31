@@ -130,3 +130,8 @@ SELECT distinct
         }
         LIMIT 1
 ----
+
+== Les rapports
+
+- link:./report/rapport.pdf[Le rapport en PDF]
+- link:./report/diapo.pdf[Le diapo en PDF]
